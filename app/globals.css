@@ -125,4 +125,7 @@
   .bg-blue-1 {
     background-color: #0877FF !important;
   }
+  .bg-blue-1{
+    color: #1C1F2E !important;
+  }
 }
