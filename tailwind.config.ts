@@ -22,8 +22,10 @@ const config: Config = {
         dark: {
           1: '#1C1F2E',
           2: '#161925',
-          sidebar: '#0A192F'  // Added navy blue color for sidebar
+          sidebar: '#0A192F'  
         },
+        blue: {
+          1:'#0877FF'},
         border: "var(--color-border)",
         input: "var(--color-input)",
         ring: "var(--color-ring)",

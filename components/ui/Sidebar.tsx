@@ -16,15 +16,17 @@ const Sidebar = () => {
     <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between bg-[#0A192F] p-6 pt-28 text-white max-sm:hidden lg:w-[264px] border-r border-white/5">
       <div className='flex flex-col gap-6'>
         {sidebarLinks.map((link: SidebarLink) => {
-          const isActive = pathname === link.route || pathname?.startsWith(link.route);
+          const isActive = pathname === link.route || 
+            (pathname?.startsWith(link.route) && link.route !== '/');
 
           return (
             <Link
               href={link.route}
               key={link.label}
-              className={cn('flex gap-4 items-center p-4 rounded-lg justify-start transition-colors hover:bg-white/5', {
-                'bg-white/10': isActive,
-              })}
+              className={cn(
+                "flex gap-4 items-center p-4 rounded-lg justify-start transition-all hover:bg-white/5",
+                isActive && "bg-[#0877FF]"
+              )}
             >
               <Image 
                 src={link.imgUrl}
