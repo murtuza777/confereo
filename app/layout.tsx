@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/ui/Sidebar";
@@ -27,13 +28,27 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} bg-dark-1`} suppressHydrationWarning>
-        
-        <main className="flex min-h-screen pt-[72px]">
-          
-          <div className="flex-1">
-            {children}
-          </div>
-        </main>
+        <ClerkProvider
+        appearance={{
+          layout: {
+            logoImageUrl: "/icons/logo.svg",
+            socialButtonsVariant: "iconButton",
+          },
+          variables: {
+            colorText: "#FFFFFF",
+            colorPrimary: "#0E78F9",
+            colorBackground: "#1C1F2E",
+            colorInputBackground: "#252A41",
+            colorInputText: "#FFFFFF",
+          }
+        }}
+        >
+          <main className="flex min-h-screen pt-[72px]">
+            <div className="flex-1">
+              {children}
+            </div>
+          </main>
+        </ClerkProvider>
       </body>
     </html>
   );
