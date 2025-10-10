@@ -12,6 +12,10 @@
   .flex-between{
     @apply flex justify-between items-center
   }
+
+  .glassmorphism {
+    @apply bg-white/10 backdrop-blur-sm border border-white/20
+  }
 }
 
 
