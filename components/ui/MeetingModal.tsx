@@ -31,10 +31,13 @@ const MeetingModal = ({ isOpen, onClose, title, className, buttontext, handleCli
         <div className='flex flex-col gap-6'>
           {image && (
             <div className='flex justify-center'>
-              <img src={image} alt="image" width={72} height={72} />
+              <img src={image} alt="image" width={72} height={72} style={{ width: 'auto', height: 'auto' }} />
             </div>
           )}
-          <h1 className={cn('text-3xl font-bold leading-[42px]', className)}>{title}</h1>
+          <DialogHeader>
+            <DialogTitle className={cn('text-3xl font-bold leading-[42px]', className)}>{title}</DialogTitle>
+            <DialogDescription className="sr-only">{title}</DialogDescription>
+          </DialogHeader>
           {children}
           <Button className='bg-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0' onClick={handleClick}>
             {buttonIcon && (<Image src={buttonIcon} alt='buttonIcon' width={13} height={13} />)}

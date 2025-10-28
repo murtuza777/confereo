@@ -10,7 +10,8 @@ const Navbar = () => {
           width={32}
           height={32}
           alt="confero logo"
-          className='max-sm:size-10'
+          className='max-sm:size-10 max-sm:w-10 max-sm:h-10'
+          style={{ width: 'auto', height: 'auto' }}
         />
         <p className="text-[26px] font-extrabold text-white max-sm:hidden">Confereo</p>
       </Link>

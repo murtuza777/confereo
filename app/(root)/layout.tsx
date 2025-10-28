@@ -1,11 +1,12 @@
-import react, { ReactNode } from "react";
+import StreamClientProvider from "@/provider/StreamClientProvider";
+import { ReactNode } from "react";
 
-const RooLayout =({children}: {children: ReactNode;}) => {
+const RootLayout = ({children}: {children: ReactNode}) => {
   return (
-        <main>
-            {children}
-            footer
-        </main>
+    <StreamClientProvider>
+      {children}
+    </StreamClientProvider>
   );
 }
-export default RooLayout;
+
+export default RootLayout;
