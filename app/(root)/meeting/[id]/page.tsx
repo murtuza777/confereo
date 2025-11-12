@@ -1,11 +1,11 @@
 "use client";
-import Loader from '@/components/Loader';
-import MeetingRoom from '@/components/MeetingRoom';
-import MeetingSetup from '@/components/MeetingSetup';
-import { useGetCallById } from '@/hooks/useGetCallById';
 import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
 import React, { useState, use } from 'react';
+import { useGetCallById } from '@/hooks/useGetCallById';
+import Loader from '@/components/Loader';
+import MeetingRoom from '@/components/MeetingRoom';
+import MeetingSetup from '@/components/MeetingSetup';
 
 const Meeting = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -13,8 +13,16 @@ const Meeting = ({ params }: { params: Promise<{ id: string }> }) => {
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const { call, isCallLoading } = useGetCallById(id);
 
-  if (!isLoaded || isCallLoading || !call) {
-    return <Loader />;
+  console.log('Loader component:', Loader);
+  console.log('MeetingRoom component:', MeetingRoom);
+  console.log('MeetingSetup component:', MeetingSetup);
+
+  if (!isLoaded || isCallLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!call) {
+    return <div>Call not found</div>;
   }
 
   return (
