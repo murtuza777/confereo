@@ -3,12 +3,10 @@
 import { DeviceSettings, useCall, VideoPreview } from '@stream-io/video-react-sdk';
 import React, { useEffect, useState } from 'react'
 
-interface MeetingSetupProps {
-    setIsSetupComplete: (value: boolean) => void;
-}
 
-const MeetingSetup = ({ setIsSetupComplete }: MeetingSetupProps) => {
+const MeetingSetup = ({ setIsSetupComplete }: {setIsSetupComplete: (value: boolean) => void}) => {
     const [isMicCamToggledOn, setIsMicCamToggledOn] = useState(false);
+
     const call = useCall();
 
     if(!call){
@@ -39,8 +37,14 @@ const MeetingSetup = ({ setIsSetupComplete }: MeetingSetupProps) => {
                 Join with mic and cam off
             </label>
            <DeviceSettings />
-           <button className='rounded-md bg-green-500 px-4 py-2.5'>
-            Join Meeting
+           <button
+             className='rounded-md bg-green-500 px-4 py-2.5'
+             onClick={() => {
+               call.join();
+               setIsSetupComplete(true);
+             }}
+           >
+             Join Meeting
            </button>
         </div>
     </div>
@@ -48,3 +52,4 @@ const MeetingSetup = ({ setIsSetupComplete }: MeetingSetupProps) => {
 }
 
 export default MeetingSetup
+
