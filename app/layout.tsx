@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/ui/Sidebar";
 import Navbar from "@/components/ui/Navbar";
+import "@stream-io/video-react-sdk/dist/css/styles.css";
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +48,7 @@ export default function RootLayout({
           <main className="flex min-h-screen pt-[72px]">
             <div className="flex-1">
               {children}
+              <Toaster />
             </div>
           </main>
         </ClerkProvider>
