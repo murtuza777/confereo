@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls } from '@stream-io/video-react-sdk';
+import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls, CallStats, CallStatsButton } from '@stream-io/video-react-sdk';
 import React, { useState } from 'react';
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LayoutList } from 'lucide-react';
+import { LayoutList, Users } from 'lucide-react';
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
@@ -55,12 +55,20 @@ export const MeetingRoom = () => {
                 >
                   {item}
                 </DropdownMenuItem>
+                {index < array.length - 1 && (
                   <DropdownMenuSeparator className='border-dark-1' />
-                
+                )}
               </div>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <CallStatsButton/>
+        <button
+          className='cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]'
+          onClick={() => setShowParticipants(prev => !prev)}
+        >
+          <Users size={20} className="text-white"/>
+        </button>
       </div>
     </section>
   );
