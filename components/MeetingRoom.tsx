@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls, CallStats, CallStatsButton } from '@stream-io/video-react-sdk';
+import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls, CallStats, CallStatsButton, useCallStateHooks, CallingState } from '@stream-io/video-react-sdk';
 import React, { useState } from 'react';
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
 import { LayoutList, Users } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import EndCallButton from './ui/EndCallButton';
+import Loader from './Loader';
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
 
@@ -22,6 +23,12 @@ export const MeetingRoom = () => {
   const isPersonalRoom = !!searchParams.get('personal') 
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
+
+  const {useCallCallingState} = useCallStateHooks();
+  const callingState = useCallCallingState();
+
+  if(callingState !== CallingState.JOINED) return <Loader />
+
 
   const CallLayout = () => {
     switch (layout) {
@@ -44,7 +51,7 @@ export const MeetingRoom = () => {
           <CallParticipantsList onClose={() => setShowParticipants(false)} />
         </div>
       </div>
-      <div className='fixed bottom-0 flex w-full items-center justify-center gap-5 border-t border-dark-1 bg-dark-2 py-3'>
+      <div className='fixed bottom-0 flex w-full items-center justify-center gap-5 flex-wrap border-t border-dark-1 bg-dark-2 py-3'>
         <CallControls />
         <DropdownMenu>
           <DropdownMenuTrigger className='cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]'>
