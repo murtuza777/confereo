@@ -6,11 +6,12 @@ import { useRouter } from 'next/navigation';
 import MeetingModal from './ui/MeetingModal';
 import { useUser } from '@clerk/nextjs';
 import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk';
+import { toast } from 'sonner';
 
 const MeetingTypeList = () => {
     const router = useRouter();
     const [meetingState, setMeetingState] = useState<'isScheduleMeeting' | 'isJoinMeeting' | 'isInstantMeeting' | undefined>();
-    const {user} =useUser();
+    const {user} = useUser();
     const client = useStreamVideoClient();
     const [Values, setValues] = useState({
         dateTime: new Date(),
@@ -18,7 +19,6 @@ const MeetingTypeList = () => {
         link: '',
     });
     const [callDetails, setCallDetails] = useState<Call>();
-
 
     const createMeeting = async () => {
         
@@ -34,6 +34,8 @@ const MeetingTypeList = () => {
             new Date(Date.now()).toISOString();
             const description = Values.description || 'Instant Meeting';
 
+            toast.loading('Creating meeting...');
+
             await call.getOrCreate({
                 data: {
                     starts_at: startsAt,
@@ -42,13 +44,24 @@ const MeetingTypeList = () => {
                     }
                 }
             });
+
             setCallDetails(call);
+
+            toast.success('Meeting created successfully!', {
+                description: new Date(startsAt).toLocaleString(),
+            });
+
             if(!Values.description){
                 router.push(`/meeting/${call.id}`);
+            } else {
+                setCallDetails(call);
             }
 
         } catch (error) {
             console.error(error);
+            toast.error('Failed to create meeting', {
+                description: 'Please try again later.',
+            });
         }
     }
     
@@ -102,6 +115,27 @@ const MeetingTypeList = () => {
         buttontext='Schedule Meeting'
         handleClick={() => {createMeeting(); setMeetingState(undefined);}}
         />
+        { !callDetails ? (
+        <MeetingModal 
+        isOpen={meetingState === 'isScheduleMeeting'}
+        onClose={() => setMeetingState(undefined)}
+        title='Create meeting'
+        handleClick={() => {createMeeting(); setMeetingState(undefined);}}
+           />
+        ) : (
+        <MeetingModal 
+        isOpen={meetingState === 'isScheduleMeeting'}
+        onClose={() => setMeetingState(undefined)}
+        title='Meeting created successfully!'
+        className='text-center'
+        buttontext='Copy Meeting Link'
+        handleClick={() => {
+            // navigator.clipboard.writeText(meetingLink);
+            //toast({title:'Link copied to clipboard'})
+        }}
+        image="icons/checked.svg"
+        buttonIcon="icons/copy.svg"
+    />)}
         
         {/* Join Meeting Modal */}
         <MeetingModal 
@@ -118,3 +152,4 @@ const MeetingTypeList = () => {
 }
 
 export default MeetingTypeList;
+
