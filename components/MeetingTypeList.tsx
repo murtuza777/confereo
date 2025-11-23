@@ -7,6 +7,8 @@ import MeetingModal from './ui/MeetingModal';
 import { useUser } from '@clerk/nextjs';
 import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk';
 import { toast } from 'sonner';
+import { Textarea } from './ui/textarea';
+import ReactDatePicker from 'react-datepicker';
 
 const MeetingTypeList = () => {
     const router = useRouter();
@@ -53,8 +55,6 @@ const MeetingTypeList = () => {
 
             if(!Values.description){
                 router.push(`/meeting/${call.id}`);
-            } else {
-                setCallDetails(call);
             }
 
         } catch (error) {
@@ -107,34 +107,60 @@ const MeetingTypeList = () => {
         />
         
         {/* Schedule Meeting Modal */}
+        {!callDetails ? (
         <MeetingModal 
         isOpen={meetingState === 'isScheduleMeeting'}
-        onClose={() => setMeetingState(undefined)}
-        title='Schedule a meeting'
-        className='text-center'
-        buttontext='Schedule Meeting'
-        handleClick={() => {createMeeting(); setMeetingState(undefined);}}
-        />
-        { !callDetails ? (
-        <MeetingModal 
-        isOpen={meetingState === 'isScheduleMeeting'}
-        onClose={() => setMeetingState(undefined)}
+        onClose={() => {
+            setMeetingState(undefined);
+            setValues({ dateTime: new Date(), description: '', link: '' });
+        }}
         title='Create meeting'
-        handleClick={() => {createMeeting(); setMeetingState(undefined);}}
-           />
+        buttontext='Create Meeting'
+        handleClick={createMeeting}
+           >
+            <div className='flex flex-col gap-2.5'>
+              <label className='text-base text-normal leading-[22px] text-sky-2'>
+                Add a description
+              </label>
+              <Textarea 
+                className='border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0'
+                onChange={(e) => setValues({...Values,description:e.target.value})}
+                value={Values.description}
+              />
+            </div>
+            <div className='flex flex-col gap-2.5'>
+              <label className='text-base text-normal leading-[22px] text-sky-2'>
+                Select date and time
+              </label>
+              <ReactDatePicker
+                selected={Values.dateTime}
+                onChange={(date) => setValues({...Values,dateTime:date!})}
+                showTimeSelect
+                timeFormat='HH:mm'
+                timeIntervals={15}
+                timeCaption='time'
+                dateFormat='MM/dd/yyyy h:mm aa'
+                className='w-full rounded bg-dark-3 p-2 focus:outline-none'
+              />
+            </div>
+            </MeetingModal>
         ) : (
         <MeetingModal 
         isOpen={meetingState === 'isScheduleMeeting'}
-        onClose={() => setMeetingState(undefined)}
+        onClose={() => {
+            setMeetingState(undefined);
+            setCallDetails(undefined);
+            setValues({ dateTime: new Date(), description: '', link: '' });
+        }}
         title='Meeting created successfully!'
         className='text-center'
         buttontext='Copy Meeting Link'
         handleClick={() => {
-            // navigator.clipboard.writeText(meetingLink);
-            //toast({title:'Link copied to clipboard'})
+            navigator.clipboard.writeText(`${window.location.origin}/meeting/${callDetails?.id}`);
+            toast.success('Link copied to clipboard');
         }}
-        image="icons/checked.svg"
-        buttonIcon="icons/copy.svg"
+        image="/icons/checked.svg"
+        buttonIcon="/icons/copy.svg"
     />)}
         
         {/* Join Meeting Modal */}
