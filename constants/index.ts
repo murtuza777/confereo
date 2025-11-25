@@ -30,4 +30,10 @@ export const sidebarLinks: SidebarLink[] = [
     route: '/personal-room',
     imgUrl: '/icons/add-personal.svg',
   }
+]
+
+export const avatarImages: string[] = [
+  '/images/avatar-1.jpeg',
+  '/images/avatar-2.jpeg',
+  
 ];
