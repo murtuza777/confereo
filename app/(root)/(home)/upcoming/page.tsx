@@ -1,8 +1,18 @@
-export default function UpcomingPage() {
+import React from 'react'
+import CallList from '@/components/ui/CallList'
+
+
+const Upcoming = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-white">Upcoming Meetings</h1>
-      {/* Rest of your upcoming page content */}
-    </div>
+   <section className="flex size-full flex-col gap-10 text-white">
+    <h1 className='text-3xl font-bold'>
+      upcoming
+      </h1>
+
+      <CallList type="upcoming"/>
+   
+    </section>
   )
 }
+
+export default Upcoming
