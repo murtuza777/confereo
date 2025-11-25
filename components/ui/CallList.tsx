@@ -3,6 +3,8 @@
 import { useGetCalls } from '@/hooks/useGetCalls';
 import { useRouter } from 'next/navigation';
 import React from 'react'
+import MeetingCard from '../MeetingCard';
+import { Call, CallRecording } from '@stream-io/video-react-sdk';
 
 const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
 
@@ -38,8 +40,19 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
     }
   }
 
+  const calls = getCalls();
+  const noCallsMessage = getNoCallsMessage();
+
   return (
-    <div>CallList</div>
+    <div className='grid grid-cols-1 gap-5 xl:grid-cols-2'>
+      {calls && calls.length > 0 ? calls.map((meeting:Call | CallRecording) => (
+        <MeetingCard/>
+      )) : (
+        <h1>{noCallsMessage}</h1>
+      
+    )}
+
+    </div>
   )
 }
 
