@@ -1,8 +1,18 @@
-export default function PreviousPage() {
+import React from 'react'
+import CallList from '@/components/ui/CallList'
+
+const Previous = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-white">Previous Meetings</h1>
-      {/* Rest of your previous meetings content */}
-    </div>
+
+    <section className='flex size-full flex-col gap-10 text-white'>
+      <h1 className='text-3xl font-bold'>
+        previous
+      </h1>
+
+      <CallList type="ended"
+      />
+    </section>
   )
 }
+
+export default Previous;

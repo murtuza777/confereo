@@ -6,11 +6,14 @@ import { useRouter } from 'next/navigation';
 import React from 'react'
 import MeetingCard from '../MeetingCard';
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
+import Loader from '@/components/Loader';
 
 const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
 
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const router = useRouter();
+
+  if (isLoading) return <Loader />
 
 
   const getCalls = () => {
