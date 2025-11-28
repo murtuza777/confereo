@@ -3,7 +3,7 @@
 
 import { useGetCalls } from '@/hooks/useGetCalls';
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React, { useEffect } from 'react'
 import MeetingCard from '../MeetingCard';
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
 import Loader from '@/components/Loader';
@@ -43,6 +43,32 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
         return '';
     }
   }
+
+  useEffect(() => { 
+    const fetchRecordings = async () => {
+      const callData = await Promise.call(callRecordings.
+      map((meeting) => meeting.queryRecordings()))
+
+      const recordings = callData
+      .filter(call => call.recordings.length > 0)
+      .flatMap(call => call.recordings)
+
+//what is a flatmap?
+//flatMap is a method that is used to flatten an array of arrays into a single array.
+//it is similar to map, but it returns a single array instead of an array of arrays.
+//it is used to flatten an array of arrays into a single array.
+//example: const array = [[1, 2], [3, 4], [5, 6]];
+//const flattened = array.flatMap(subArray => subArray);
+//console.log(flattened); // [1, 2, 3, 4, 5, 6]
+//for our case [['rec1' , 'rec2'], ['rec3]]
+//['rec1', 'rec2', 'rec3']
+
+    setRecordings(recordings);
+
+    }
+  if (type === 'recordings') fetchRecordings();
+  }, [type, callRecordings]);
+
 
   const calls = getCalls() ?? [];
   const demoUpcomingMeetings =
