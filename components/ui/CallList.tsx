@@ -3,7 +3,7 @@
 
 import { useGetCalls } from '@/hooks/useGetCalls';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import MeetingCard from '../MeetingCard';
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
 import Loader from '@/components/Loader';
@@ -11,17 +11,16 @@ import Loader from '@/components/Loader';
 const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
 
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
+  const [recordings, setRecordings] = useState<CallRecording[]>([]);
+  const [recordingError, setRecordingError] = useState<string | null>(null);
   const router = useRouter();
-
-  if (isLoading) return <Loader />
-
 
   const getCalls = () => {
     switch (type) {
       case 'ended':
         return endedCalls;
       case 'recordings':
-        return callRecordings;  
+        return recordings;  
       case 'upcoming':
         return upcomingCalls;  
       default:
@@ -46,28 +45,31 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
 
   useEffect(() => { 
     const fetchRecordings = async () => {
-      const callData = await Promise.call(callRecordings.
-      map((meeting) => meeting.queryRecordings()))
+      try {
+        // Limit how many calls we hit to avoid Stream rate limits (429).
+        const limitedCalls = callRecordings.slice(0, 5);
 
-      const recordings = callData
-      .filter(call => call.recordings.length > 0)
-      .flatMap(call => call.recordings)
+        const callData = await Promise.all(
+          limitedCalls.map((meeting) => meeting.queryRecordings())
+        );
 
-//what is a flatmap?
-//flatMap is a method that is used to flatten an array of arrays into a single array.
-//it is similar to map, but it returns a single array instead of an array of arrays.
-//it is used to flatten an array of arrays into a single array.
-//example: const array = [[1, 2], [3, 4], [5, 6]];
-//const flattened = array.flatMap(subArray => subArray);
-//console.log(flattened); // [1, 2, 3, 4, 5, 6]
-//for our case [['rec1' , 'rec2'], ['rec3]]
-//['rec1', 'rec2', 'rec3']
+        const allRecordings = callData
+          .filter((call) => call.recordings.length > 0)
+          .flatMap((call) => call.recordings);
 
-    setRecordings(recordings);
+        setRecordings(allRecordings);
+        setRecordingError(null);
+      } catch (error) {
+        console.error('Failed to fetch recordings (possibly rate limited):', error);
+        setRecordingError('Unable to load recordings right now. Please try again soon.');
+        setRecordings([]);
+      }
+    };
 
-    }
-  if (type === 'recordings') fetchRecordings();
+    if (type === 'recordings') fetchRecordings();
   }, [type, callRecordings]);
+
+  if (isLoading) return <Loader />
 
 
   const calls = getCalls() ?? [];
@@ -149,7 +151,7 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
           link='#'
         />
       )) : (
-        <h1>{noCallsMessage}</h1>
+        <h1>{recordingError ?? noCallsMessage}</h1>
       )}
 
     </div>

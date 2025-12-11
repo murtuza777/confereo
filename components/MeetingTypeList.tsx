@@ -26,7 +26,13 @@ const MeetingTypeList = () => {
         
         if (!client || !user) return;
 
+        let toastId;
         try {
+            if (!Values.dateTime) {
+                toast.error('Please select a date and time');
+                return;
+            }
+
             const id = crypto.randomUUID();
             const call = client.call('default',id);
 
@@ -36,7 +42,7 @@ const MeetingTypeList = () => {
             new Date(Date.now()).toISOString();
             const description = Values.description || 'Instant Meeting';
 
-            toast.loading('Creating meeting...');
+            toastId = toast.loading('Creating meeting...');
 
             await call.getOrCreate({
                 data: {
@@ -49,19 +55,21 @@ const MeetingTypeList = () => {
 
             setCallDetails(call);
 
+            if(!Values.description){
+                router.push(`/meeting/${call.id}`);
+            }
+            
             toast.success('Meeting created successfully!', {
                 description: new Date(startsAt).toLocaleString(),
             });
 
-            if(!Values.description){
-                router.push(`/meeting/${call.id}`);
-            }
-
         } catch (error) {
-            console.error(error);
+            console.error("Error creating meeting:", error);
             toast.error('Failed to create meeting', {
                 description: 'Please try again later.',
             });
+        } finally {
+            if (toastId) toast.dismiss(toastId);
         }
     }
 
@@ -87,7 +95,7 @@ const MeetingTypeList = () => {
         img='/icons/recordings.svg'
         title='View recordings'
         description='Check out your recordings'
-        handleClick={() => setMeetingState('isInstantMeeting')}
+        handleClick={() => router.push('/recordings')}
         className='bg-purple-500'
         />
         <HomeCard 
@@ -180,4 +188,3 @@ const MeetingTypeList = () => {
 }
 
 export default MeetingTypeList;
-

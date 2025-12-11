@@ -18,6 +18,11 @@ const EndCallButton = () => {
 
   return (
     <Button onClick={async() => {
+      try {
+        await call?.stopRecording();
+      } catch (err) {
+        console.error('Failed to stop recording:', err);
+      }
       await call?.endCall();
       router.push('/');
 

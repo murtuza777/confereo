@@ -24,6 +24,18 @@ const MeetingSetup = ({ setIsSetupComplete }: {setIsSetupComplete: (value: boole
     
     },[isMicCamToggledOn,call?.camera,call?.microphone])
 
+  const handleJoin = async () => {
+    try {
+      await call.join();
+      // Start recording on join; if it fails, log and continue the call.
+      await call.startRecording();
+    } catch (err) {
+      console.error('Failed to start recording:', err);
+    } finally {
+      setIsSetupComplete(true);
+    }
+  };
+
   return (
     <div className='flex h-screen w-full flex-col items-center justify-center gap-3 text-white'>
         <h1 className='text-2xl font-bold'>Meeting Setup</h1>
@@ -39,10 +51,7 @@ const MeetingSetup = ({ setIsSetupComplete }: {setIsSetupComplete: (value: boole
            <DeviceSettings />
            <button
              className='rounded-md bg-green-500 px-4 py-2.5'
-             onClick={() => {
-               call.join();
-               setIsSetupComplete(true);
-             }}
+             onClick={handleJoin}
            >
              Join Meeting
            </button>

@@ -15,15 +15,15 @@ export const useGetCallById = (id:string | string[]) => {
         const loadcall = async () => {
             const { calls } = await client.queryCalls({
                 filter_conditions: {
-                id
-            }
-    })
+                  
+                }
+            })
 
-    if(calls.length > 0) {
-        setCall(calls[0]);
-        setIsCallLoading(false);
-    }
-}
+            if(calls.length > 0) {
+                setCall(calls[0]);
+            }
+            setIsCallLoading(false);
+        }
         loadcall();
     }, [client, id]);
     return { call, isCallLoading };

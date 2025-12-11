@@ -1,6 +1,16 @@
 import react, { ReactNode } from "react";
 import Navbar from "@/components/ui/Navbar";
 import Sidebar from "@/components/ui/Sidebar";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Confereo",
+  description: "Confereo is a platform for creating and joining video conferences.",
+  icons: {
+    icon: "/icons/logo.svg",
+  }
+};
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   return (
