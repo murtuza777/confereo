@@ -1,7 +1,10 @@
 "use client";
 
+import { Button } from '@/components/ui/button';
 import { useUser } from '@clerk/nextjs';
+import link from 'next/link';
 import React from 'react';
+import { toast } from 'sonner';
 
 const Table = ({title, description}: {title:string ; description:string;}) => (
   <div className= 'flex flex-col items-start gap-2 xl:flex-row'> 
@@ -12,13 +15,35 @@ const Table = ({title, description}: {title:string ; description:string;}) => (
 
 export default function PersonalRoomPage() {
   const { user } = useUser();
+  const meetingid = user?.id;
+    
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meetingid}?personal=true`;
+
+  const startRoom = () => {
+
+  }
   const displayName = user?.username || user?.firstName || 'My';
   return (
     <div className='p-8'>
       <h1 className='text-2xl font-bold text-white'>Personal Room</h1>
       <div className='flex w-full flex-col gap-8 xl:max-w-[900px]'>
         <Table title='topic' description={`${displayName}'s Meeting Room`} />
+        <Table title='meeting id' description={meetingid!} />
+        <Table title='invite link' description={meetingLink} />
       </div>
+      <div className='flex gap-5'>
+        <Button className='bg-blue-600' onClick={startRoom}> Start Meeting</Button>
+
+
+
+        <Button className='bg-dark-3' onClick={() => {
+                navigator.clipboard.writeText(meetingLink);
+                toast("Link Copied");
+              }}
+              >
+               copy invitation
+              </Button>
+              </div>
     </div>
   );
 }
