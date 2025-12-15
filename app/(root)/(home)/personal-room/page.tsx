@@ -1,8 +1,11 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
+import { useGetCallById } from '@/hooks/useGetCallById';
 import { useUser } from '@clerk/nextjs';
+import { useStreamVideoClient } from '@stream-io/video-react-sdk';
 import link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -16,14 +19,31 @@ const Table = ({title, description}: {title:string ; description:string;}) => (
 export default function PersonalRoomPage() {
   const { user } = useUser();
   const meetingid = user?.id;
-    
+  
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meetingid}?personal=true`;
+  const client = useStreamVideoClient();
 
-  const startRoom = () => {
+  const router = useRouter();
 
-  }
-  const displayName = user?.username || user?.firstName || 'My';
-  return (
+  const { call } = useGetCallById(meetingid!);
+
+  const startRoom = async() => {
+
+    if(!client || !user) return;
+
+    if(!call) {
+      const newCall = client.call('default',meetingid!)
+
+    await newCall.getOrCreate({
+      data: {
+          starts_at: new Date().toISOString(),
+          }
+        })
+      }
+      router.push(`/meeting/${meetingid}?personal=true`)
+    }
+    const displayName = user?.username || user?.firstName || 'My';
+    return (
     <div className='p-8'>
       <h1 className='text-2xl font-bold text-white'>Personal Room</h1>
       <div className='flex w-full flex-col gap-8 xl:max-w-[900px]'>
