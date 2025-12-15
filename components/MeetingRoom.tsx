@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LayoutList, Users } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import EndCallButton from './ui/EndCallButton';
 import Loader from './Loader';
 
@@ -26,6 +26,7 @@ export const MeetingRoom = () => {
 
   const {useCallCallingState} = useCallStateHooks();
   const callingState = useCallCallingState();
+  const router = useRouter();
 
   if(callingState !== CallingState.JOINED) return <Loader />
 
@@ -52,7 +53,7 @@ export const MeetingRoom = () => {
         </div>
       </div>
       <div className='fixed bottom-0 flex w-full items-center justify-center gap-5 flex-wrap border-t border-dark-1 bg-dark-2 py-3'>
-        <CallControls />
+        <CallControls onLeave={() => router.push('/')} />
         <DropdownMenu>
           <DropdownMenuTrigger className='cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]'>
             <LayoutList size={20} className='text-white' />
