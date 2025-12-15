@@ -35,8 +35,8 @@ const MeetingCard = ({
         <Image src={icon} alt="upcoming" width={28} height={28} />
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-bold">{title}</h1>
-            <p className="text-base font-normal">{date}</p>
+            <h1 className="text-2xl font-bold text-white">{title}</h1>
+            <p className="text-base font-normal text-white">{date}</p>
           </div>
         </div>
       </article>
@@ -63,7 +63,10 @@ const MeetingCard = ({
               {buttonIcon1 && (
                 <Image src={buttonIcon1} alt="feature" width={20} height={20} />
               )}
-              &nbsp; {buttonText}
+              &nbsp;
+              <span className="text-white">
+                {buttonText}
+              </span>
             </Button>
             <Button
               onClick={() => {
