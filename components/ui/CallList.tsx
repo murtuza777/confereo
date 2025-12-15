@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client'
 
 import { useGetCalls } from '@/hooks/useGetCalls';
@@ -100,7 +99,7 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
     const call = meeting as Call;
     const startsAt =
       call.state?.startsAt ??
-      call.state?.starts_at ??
+      (call.state as any)?.starts_at ??
       (meeting as CallRecording)?.start_time ??
       null;
 
@@ -131,16 +130,16 @@ const CallList = ({type}: {type: 'ended' | 'recordings' | 'upcoming'}) => {
         isPreviousMeeting={type === 'ended'}
         buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
         buttonText={type === 'recordings' ? 'Play' : 'Start'}
-        handleClick={type === 'recordings' ? () => router.push(`${meeting.url}`) : () => router.push(`/meeting/${meeting.id}`)}
+        handleClick={type === 'recordings' ? () => router.push(`${(meeting as CallRecording).url}`) : () => router.push(`/meeting/${(meeting as Call).id}`)}
         link={type === 'recordings'
-          ? meeting.url
-          : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`}
+          ? (meeting as CallRecording).url
+          : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${(meeting as Call).id}`}
         
         
         
         
         />
-      )) : demoUpcomingMeetings.length > 0 ? demoUpcomingMeetings.map((meeting: Call) => (
+      )) : demoUpcomingMeetings.length > 0 ? demoUpcomingMeetings.map((meeting) => (
         <MeetingCard
           key={meeting.id}
           icon='/icons/upcoming.svg'

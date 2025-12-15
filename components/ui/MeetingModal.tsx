@@ -6,7 +6,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
   } from "@/components/ui/dialog"
 import Image from 'next/image';
 import { Button } from './button';
@@ -31,7 +30,7 @@ const MeetingModal = ({ isOpen, onClose, title, className, buttontext, handleCli
         <div className='flex flex-col gap-6'>
           {image && (
             <div className='flex justify-center'>
-              <img src={image} alt="image" width={72} height={72} style={{ width: 'auto', height: 'auto' }} />
+              <Image src={image} alt="image" width={72} height={72} />
             </div>
           )}
           <DialogHeader>

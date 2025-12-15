@@ -3,7 +3,7 @@
 import MeetingTypeList from '../../../components/MeetingTypeList';
 import React, { useState, useEffect } from 'react'
 
-const home = () => {
+const Home = () => {
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
 
@@ -30,15 +30,10 @@ const home = () => {
        </div>
     </div>
 
-    <MeetingTypeList 
-      isOpen={false}
-      onClose={() => {}}
-      title=""
-      handleClick={() => {}}
-    />
+    <MeetingTypeList />
   </section>
   );
 }
 
-export default home;
+export default Home;
 

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 
 const Navbar = () => {
   return (
@@ -16,7 +17,16 @@ const Navbar = () => {
         <p className="text-[26px] font-extrabold text-white max-sm:hidden">Confereo</p>
       </Link>
       <div className="flex items-center gap-4">
-        
+        <SignedIn>
+          <UserButton afterSignOutUrl="/sign-in" />
+        </SignedIn>
+        <SignedOut>
+          <SignInButton mode="redirect">
+            <button className="rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-500">
+              Sign in
+            </button>
+          </SignInButton>
+        </SignedOut>
       </div>
     </nav>
   )

@@ -1,13 +1,12 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls, CallStats, CallStatsButton, useCallStateHooks, CallingState } from '@stream-io/video-react-sdk';
+import { PaginatedGridLayout, SpeakerLayout, CallParticipantsList, CallControls, CallStatsButton, useCallStateHooks, CallingState } from '@stream-io/video-react-sdk';
 import React, { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
